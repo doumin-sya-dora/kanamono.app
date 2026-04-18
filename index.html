@@ -27,7 +27,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
   background: var(--bg);
   color: var(--text);
-  padding: 12px 10px 24px;
+  padding: 10px;
+  text-align: center;
 }
 
 .wrapper {
@@ -36,19 +37,20 @@ body {
 }
 
 h1 {
-  margin: 6px 0 14px;
-  font-size: 22px;
-  text-align: center;
+  margin: 8px 0 14px;
+  font-size: 20px;
 }
 
 h2 {
-  margin: 18px 0 10px;
-  font-size: 17px;
+  margin: 16px 0 10px;
+  font-size: 16px;
+  text-align: left;
 }
 
 h3 {
-  margin: 12px 0 8px;
-  font-size: 15px;
+  margin: 10px 0 8px;
+  font-size: 14px;
+  text-align: left;
 }
 
 .card {
@@ -65,11 +67,12 @@ h3 {
   color: var(--sub);
   margin: 0 0 10px;
   line-height: 1.5;
+  text-align: left;
 }
 
 .label {
-  font-size: 13px;
-  margin-bottom: 6px;
+  font-size: 12px;
+  margin-bottom: 5px;
   color: #444;
   text-align: left;
   padding-left: 2px;
@@ -77,28 +80,24 @@ h3 {
 
 input, select, button {
   width: 100%;
-  min-height: 46px;
-  border-radius: 12px;
+  box-sizing: border-box;
+  padding: 8px 6px;
+  min-height: 42px;
+  text-align: center;
+  border-radius: 10px;
   border: 1px solid #c9c9c9;
-  font-size: 16px;
+  font-size: 15px;
   background: #fff;
   color: #222;
   appearance: none;
   -webkit-appearance: none;
 }
 
-input, select {
-  padding: 10px 10px;
-  text-align: center;
-}
-
 input[readonly] {
-  background: #fafafa;
-  color: #333;
+  background: #f5f5f5;
 }
 
 button {
-  padding: 10px 8px;
   font-weight: 700;
   cursor: pointer;
   touch-action: manipulation;
@@ -121,11 +120,12 @@ button:disabled {
 .hinge   { background: #f6e3e6; }
 .strike  { background: #ede7f6; }
 .flush   { background: #fff8d6; }
-.total   { background: #f7f7f7; }
+.total   { background: #f1f1f1; }
 
 .main-select {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  padding: 10px;
+  border-width: 2px;
 }
 
 .top-result-bar {
@@ -139,6 +139,7 @@ button:disabled {
   padding: 10px 12px;
   margin-bottom: 10px;
   box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  text-align: left;
 }
 
 .top-result-title {
@@ -166,7 +167,7 @@ button:disabled {
 }
 
 .tab-btn {
-  min-height: 42px;
+  min-height: 40px;
   border-radius: 12px;
   border: 1px solid #cfcfcf;
   background: #fff;
@@ -188,32 +189,30 @@ button:disabled {
   display: block;
 }
 
-.formula-grid {
+.formula-grid,
+.formula-grid-6,
+.formula-grid-4,
+.formula-grid-3 {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
   align-items: end;
+  justify-content: start;
+}
+
+.formula-grid {
+  grid-template-columns: repeat(5, minmax(78px, 96px));
 }
 
 .formula-grid-6 {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
-  align-items: end;
+  grid-template-columns: repeat(6, minmax(78px, 96px));
 }
 
 .formula-grid-4 {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  align-items: end;
+  grid-template-columns: repeat(4, minmax(78px, 96px));
 }
 
 .formula-grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  align-items: end;
+  grid-template-columns: repeat(3, minmax(78px, 96px));
 }
 
 .box-wide {
@@ -221,52 +220,37 @@ button:disabled {
 }
 
 .result-card {
+  width: 100%;
+  margin: 0 auto;
   background: var(--result-bg);
   border: 2px solid var(--result-border);
   border-radius: 16px;
   box-shadow: 0 3px 10px rgba(0,0,0,.07);
   padding: 16px;
   white-space: pre-line;
+  text-align: left;
   font-size: 16px;
   line-height: 1.7;
   font-weight: 600;
 }
 
 .message {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 15px;
-  text-align: center;
+  width: 100%;
+  margin: 6px auto 0;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 13px;
   display: none;
+  text-align: center;
 }
 
-.message.ok {
-  background: #e8f5e9;
-  border: 1px solid #a5d6a7;
-  color: #256029;
-}
-
-.message.warn {
-  background: #fff3e0;
-  border: 1px solid #ffcc80;
-  color: #8a5200;
-}
-
-.message.info {
-  background: #e3f2fd;
-  border: 1px solid #90caf9;
-  color: #0d47a1;
-}
+.message.ok   { background:#e8f5e9; }
+.message.warn { background:#fff3e0; }
+.message.info { background:#e3f2fd; }
 
 .btn-add { background: #f5fff5; }
 .btn-delete { background: #fff7f7; }
 .btn-edit { background: #f4f8ff; }
-
-.manage-grid {
-  display: grid;
-  gap: 12px;
-}
 
 .manage-list {
   display: grid;
@@ -274,40 +258,41 @@ button:disabled {
 }
 
 .item-card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 10px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:10px;
+  text-align:left;
 }
 
 .item-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 8px;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:8px;
 }
 
 .item-meta {
-  font-size: 13px;
-  color: #555;
-  line-height: 1.5;
-  margin-bottom: 8px;
+  font-size:13px;
+  color:#555;
+  line-height:1.5;
+  margin-bottom:8px;
 }
 
 .item-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
 .badge-default {
-  display: inline-block;
-  margin-left: 6px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: #f0f0f0;
-  font-size: 11px;
-  color: #666;
-  vertical-align: middle;
+  display:inline-block;
+  margin-left:6px;
+  padding:2px 8px;
+  border-radius:999px;
+  background:#f0f0f0;
+  font-size:11px;
+  color:#666;
+  vertical-align:middle;
 }
 
 .footer-note {
@@ -315,6 +300,7 @@ button:disabled {
   font-size: 12px;
   color: #666;
   line-height: 1.5;
+  text-align: left;
 }
 
 .section-divider {
@@ -340,6 +326,7 @@ details.manage-section summary {
   font-weight: 700;
   background: #fafafa;
   border-bottom: 1px solid #eee;
+  text-align: left;
 }
 
 details.manage-section summary::-webkit-details-marker {
@@ -364,7 +351,8 @@ details.manage-section[open] summary {
   .formula-grid-6,
   .formula-grid-4,
   .formula-grid-3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(78px, 96px));
+    justify-content: start;
   }
 
   .box-wide {
@@ -375,6 +363,9 @@ details.manage-section[open] summary {
     font-size: 15px;
     line-height: 1.65;
   }
+
+  h1 { font-size: 18px; }
+  h2 { font-size: 15px; }
 }
 </style>
 </head>
@@ -689,7 +680,7 @@ details.manage-section[open] summary {
 
     <div class="card">
       <h3>編集フォーム</h3>
-      <div class="small">一覧の「編集」を押すとここに内容が入ります。</div>
+      <div class="small">一覧の「編集」を押すとここに内容が入ります。ストライクの値2は「高さ,厚み」で入力します。例: 110,2.5</div>
 
       <div class="formula-grid-4">
         <div>
@@ -796,13 +787,13 @@ function toHalfWidth(str) {
     .replace(/　/g, " ");
 }
 function normalizeNumberInputValue(v) {
-  return toHalfWidth(v).replace(/[^\d.\-]/g, "");
+  return toHalfWidth(v).replace(/[^\d.\-,]/g, "");
 }
 function getVal(id) {
   const el = document.getElementById(id);
   let v = el.value;
   if (!v) return 0;
-  v = normalizeNumberInputValue(v).trim();
+  v = toHalfWidth(v).replace(/[^\d.\-]/g, "").trim();
   if (v === "" || v === "-" || v === "." || v === "-.") return 0;
   return Number(v) || 0;
 }

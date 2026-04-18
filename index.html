@@ -71,22 +71,23 @@ h3 {
 }
 
 .label {
-  font-size: 12px;
-  margin-bottom: 5px;
+  font-size: 11px;
+  margin-bottom: 4px;
   color: #444;
-  text-align: left;
-  padding-left: 2px;
+  text-align: center;
+  padding-left: 0;
+  line-height: 1.3;
 }
 
 input, select, button {
   width: 100%;
   box-sizing: border-box;
-  padding: 8px 6px;
-  min-height: 42px;
+  padding: 7px 5px;
+  min-height: 38px;
   text-align: center;
   border-radius: 10px;
   border: 1px solid #c9c9c9;
-  font-size: 15px;
+  font-size: 14px;
   background: #fff;
   color: #222;
   appearance: none;
@@ -123,8 +124,8 @@ button:disabled {
 .total   { background: #f1f1f1; }
 
 .main-select {
-  font-size: 16px;
-  padding: 10px;
+  font-size: 15px;
+  padding: 9px;
   border-width: 2px;
 }
 
@@ -189,34 +190,53 @@ button:disabled {
   display: block;
 }
 
+/* ここからレイアウト調整 */
 .formula-grid,
 .formula-grid-6,
 .formula-grid-4,
 .formula-grid-3 {
-  display: grid;
-  gap: 8px;
-  align-items: end;
-  justify-content: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
 
-.formula-grid {
-  grid-template-columns: repeat(5, minmax(78px, 96px));
+.box,
+.op-box,
+.box-wide {
+  flex: 0 0 auto;
 }
 
-.formula-grid-6 {
-  grid-template-columns: repeat(6, minmax(78px, 96px));
-}
-
-.formula-grid-4 {
-  grid-template-columns: repeat(4, minmax(78px, 96px));
-}
-
-.formula-grid-3 {
-  grid-template-columns: repeat(3, minmax(78px, 96px));
+.box {
+  width: 84px;
 }
 
 .box-wide {
-  grid-column: span 2;
+  width: 174px;
+}
+
+.box.strike-long {
+  width: 90px;
+}
+
+.op-box {
+  width: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.op-mark {
+  width: 20px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #666;
 }
 
 .result-card {
@@ -347,16 +367,26 @@ details.manage-section[open] summary {
     top: 66px;
   }
 
-  .formula-grid,
-  .formula-grid-6,
-  .formula-grid-4,
-  .formula-grid-3 {
-    grid-template-columns: repeat(2, minmax(78px, 96px));
-    justify-content: start;
+  .box {
+    width: 78px;
   }
 
   .box-wide {
-    grid-column: span 2;
+    width: 162px;
+  }
+
+  .box.strike-long {
+    width: 82px;
+  }
+
+  .op-box {
+    width: 16px;
+    padding-bottom: 10px;
+  }
+
+  .op-mark {
+    width: 16px;
+    font-size: 16px;
   }
 
   .result-card {
@@ -366,6 +396,35 @@ details.manage-section[open] summary {
 
   h1 { font-size: 18px; }
   h2 { font-size: 15px; }
+}
+
+@media (max-width: 430px) {
+  .box {
+    width: 72px;
+  }
+
+  .box-wide {
+    width: 150px;
+  }
+
+  .box.strike-long {
+    width: 76px;
+  }
+
+  input, select, button {
+    min-height: 36px;
+    font-size: 13px;
+    padding: 6px 4px;
+  }
+
+  .op-mark {
+    height: 36px;
+    font-size: 15px;
+  }
+
+  .label {
+    font-size: 10px;
+  }
 }
 </style>
 </head>
@@ -401,23 +460,31 @@ details.manage-section[open] summary {
     <div class="card">
       <div class="small">見付け ＋ 隙間 ＋ 基準 ＋ 丁番 = 上丁番</div>
       <div class="formula-grid">
-        <div>
+        <div class="box">
           <div class="label">見付け</div>
           <input id="topMituke" class="frame" value="25" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">隙間</div>
           <input id="topGap" class="gap" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">基準</div>
           <input id="topBase" class="door" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">丁番</div>
           <input id="hingeValueViewTop" class="hinge" readonly>
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＝</div></div>
+
+        <div class="box">
           <div class="label">上丁番</div>
           <input id="topDim" class="total" readonly>
         </div>
@@ -428,27 +495,37 @@ details.manage-section[open] summary {
     <div class="card">
       <div class="small">沓摺① ＋ 沓摺② ＋ 隙間 ＋ 基準 － 丁番 = 下丁番</div>
       <div class="formula-grid-6">
-        <div>
+        <div class="box">
           <div class="label">沓摺①</div>
           <input id="bottomSill1" class="frame" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">沓摺②</div>
           <input id="bottomSill2" class="frame" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">隙間</div>
           <input id="bottomGap" class="gap" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">基準</div>
           <input id="bottomBase" class="door" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">－</div></div>
+
+        <div class="box">
           <div class="label">丁番</div>
           <input id="hingeValueViewBottom" class="hinge" readonly>
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＝</div></div>
+
+        <div class="box">
           <div class="label">下丁番</div>
           <input id="bottomDim" class="total" readonly>
         </div>
@@ -459,15 +536,15 @@ details.manage-section[open] summary {
     <div class="card">
       <div class="small">枠全長 = 見付け + 上隙間 + DH + 下隙間 + 沓摺り合計</div>
       <div class="formula-grid-4">
-        <div>
+        <div class="box-wide">
           <div class="label">DH</div>
           <input id="dh" class="door" inputmode="decimal">
         </div>
-        <div>
+        <div class="box-wide">
           <div class="label">枠全長</div>
           <input id="frameLength" class="total" readonly>
         </div>
-        <div>
+        <div class="box-wide">
           <div class="label">丁番枚数</div>
           <input id="hingeCount" class="door" inputmode="numeric" pattern="[0-9]*">
         </div>
@@ -477,15 +554,15 @@ details.manage-section[open] summary {
     <h2>丁番追加</h2>
     <div class="card">
       <div class="formula-grid-4">
-        <div>
+        <div class="box-wide">
           <div class="label">名前</div>
           <input id="newHingeName">
         </div>
-        <div>
+        <div class="box">
           <div class="label">値</div>
           <input id="newHingeValue" class="hinge" inputmode="decimal">
         </div>
-        <div>
+        <div class="box-wide">
           <div class="label">追加</div>
           <button type="button" id="addHingeBtn" class="btn-add">＋ 追加</button>
         </div>
@@ -509,35 +586,46 @@ details.manage-section[open] summary {
     <div class="card">
       <div class="small">枠下端～Hまで① ＋ 枠下端～Hまで② ＋ 基準値 － 下端 = 位置</div>
       <div class="formula-grid-6">
-        <div>
-          <div class="label">枠下端～Hまで①</div>
+        <div class="box strike-long">
+          <div class="label">枠下端～H①</div>
           <input id="strikeFromBottom1" class="frame" inputmode="decimal">
         </div>
-        <div>
-          <div class="label">枠下端～Hまで②</div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box strike-long">
+          <div class="label">枠下端～H②</div>
           <input id="strikeFromBottom2" class="frame" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">基準値</div>
           <input id="strikeBase" class="door" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">－</div></div>
+
+        <div class="box">
           <div class="label">下端</div>
           <input id="strikeOffsetView" class="strike" readonly>
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＝</div></div>
+
+        <div class="box">
           <div class="label">位置</div>
           <input id="strikeResult" class="total" readonly>
         </div>
-        <div>
+
+        <div class="box">
           <div class="label">高さ</div>
           <input id="strikeHeightView" class="strike" readonly>
         </div>
-        <div>
+
+        <div class="box">
           <div class="label">上端</div>
           <input id="strikeTop" class="total" readonly>
         </div>
-        <div>
+
+        <div class="box">
           <div class="label">中心</div>
           <input id="strikeCenter" class="total" readonly>
         </div>
@@ -547,15 +635,19 @@ details.manage-section[open] summary {
 
       <div class="small">厚み － 枠板厚 = 必要スペーサー</div>
       <div class="formula-grid-4">
-        <div>
+        <div class="box">
           <div class="label">厚み</div>
           <input id="strikeThicknessView" class="strike" readonly>
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">－</div></div>
+
+        <div class="box">
           <div class="label">枠板厚</div>
           <input id="frameThickness" class="frame" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＝</div></div>
+
+        <div class="box-wide">
           <div class="label">スペーサー</div>
           <input id="spacerResult" class="total" readonly>
         </div>
@@ -565,25 +657,23 @@ details.manage-section[open] summary {
     <h2>ストライク追加</h2>
     <div class="card">
       <div class="formula-grid-4">
-        <div>
+        <div class="box-wide">
           <div class="label">名前</div>
           <input id="newStrikeName">
         </div>
-        <div>
+        <div class="box">
           <div class="label">下端</div>
           <input id="newStrikeOffset" class="strike" inputmode="decimal">
         </div>
-        <div>
+        <div class="box">
           <div class="label">高さ</div>
           <input id="newStrikeHeight" class="strike" inputmode="decimal">
         </div>
-        <div>
+        <div class="box">
           <div class="label">厚み</div>
           <input id="newStrikeThickness" class="strike" inputmode="decimal">
         </div>
-      </div>
-      <div class="formula-grid-3" style="margin-top:10px;">
-        <div>
+        <div class="box-wide">
           <div class="label">追加</div>
           <button type="button" id="addStrikeBtn" class="btn-add">＋ 追加</button>
         </div>
@@ -607,23 +697,31 @@ details.manage-section[open] summary {
     <div class="card">
       <div class="small">親W ＋ 召合わせ/2 ＋ フランス落とし = 位置</div>
       <div class="formula-grid">
-        <div>
+        <div class="box">
           <div class="label">親W</div>
           <input id="parentW" class="door" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">召合わせ</div>
           <input id="meetingInput" class="frame" inputmode="decimal">
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">→</div></div>
+
+        <div class="box">
           <div class="label">召合わせ/2</div>
           <input id="meetingHalf" class="total" readonly>
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＋</div></div>
+
+        <div class="box">
           <div class="label">フランス落とし</div>
           <input id="flushValueView" class="flush" readonly>
         </div>
-        <div>
+        <div class="op-box"><div class="op-mark">＝</div></div>
+
+        <div class="box">
           <div class="label">位置</div>
           <input id="flushResult" class="total" readonly>
         </div>
@@ -633,15 +731,15 @@ details.manage-section[open] summary {
     <h2>フランス落とし追加</h2>
     <div class="card">
       <div class="formula-grid-4">
-        <div>
+        <div class="box-wide">
           <div class="label">名前</div>
           <input id="newFlushName">
         </div>
-        <div>
+        <div class="box">
           <div class="label">値</div>
           <input id="newFlushValue" class="flush" inputmode="decimal">
         </div>
-        <div>
+        <div class="box-wide">
           <div class="label">追加</div>
           <button type="button" id="addFlushBtn" class="btn-add">＋ 追加</button>
         </div>
@@ -683,7 +781,7 @@ details.manage-section[open] summary {
       <div class="small">一覧の「編集」を押すとここに内容が入ります。ストライクの値2は「高さ,厚み」で入力します。例: 110,2.5</div>
 
       <div class="formula-grid-4">
-        <div>
+        <div class="box-wide">
           <div class="label">種類</div>
           <select id="manageType">
             <option value="hinge">丁番</option>
@@ -691,26 +789,26 @@ details.manage-section[open] summary {
             <option value="flush">フランス落とし</option>
           </select>
         </div>
-        <div>
+        <div class="box-wide">
           <div class="label">名前</div>
           <input id="manageName">
         </div>
-        <div>
+        <div class="box">
           <div class="label">値1</div>
           <input id="manageValue1" inputmode="decimal">
         </div>
-        <div>
+        <div class="box">
           <div class="label">値2</div>
           <input id="manageValue2" inputmode="decimal">
         </div>
       </div>
 
       <div class="formula-grid-4" style="margin-top:10px;">
-        <div>
+        <div class="box-wide">
           <div class="label">更新</div>
           <button type="button" id="manageSaveBtn" class="btn-edit">更新</button>
         </div>
-        <div>
+        <div class="box-wide">
           <div class="label">編集解除</div>
           <button type="button" id="manageCancelBtn" class="btn-delete">編集解除</button>
         </div>
@@ -724,7 +822,8 @@ details.manage-section[open] summary {
   <div id="resultText" class="result-card">※ 必要項目を入力してください</div>
 
   <div class="footer-note">
-    ※ 横スクロールなし、縦スクロール前提で調整済み<br>
+    ※ ボックスを小さめにして横並び化済み<br>
+    ※ 記号（＋・－・＝）を追加済み<br>
     ※ 召合わせは自動で半分計算されます
   </div>
 

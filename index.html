@@ -202,17 +202,68 @@ button:disabled {
 .formula-grid {
   grid-template-columns: repeat(5, minmax(78px, 96px));
 }
-
 .formula-grid-6 {
   grid-template-columns: repeat(6, minmax(78px, 96px));
 }
-
 .formula-grid-4 {
   grid-template-columns: repeat(4, minmax(78px, 96px));
 }
-
 .formula-grid-3 {
   grid-template-columns: repeat(3, minmax(78px, 96px));
+}
+
+.formula-grid-symbol-11,
+.formula-grid-symbol-9,
+.formula-grid-symbol-7,
+.formula-grid-symbol-5 {
+  display: grid;
+  gap: 8px;
+  align-items: end;
+  justify-content: start;
+}
+
+.formula-grid-symbol-11 {
+  grid-template-columns:
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px);
+}
+
+.formula-grid-symbol-9 {
+  grid-template-columns:
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px);
+}
+
+.formula-grid-symbol-7 {
+  grid-template-columns:
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px);
+}
+
+.formula-grid-symbol-5 {
+  grid-template-columns:
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px) 20px
+    minmax(78px, 96px);
+}
+
+.symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #555;
 }
 
 .box-wide {
@@ -350,9 +401,18 @@ details.manage-section[open] summary {
   .formula-grid,
   .formula-grid-6,
   .formula-grid-4,
-  .formula-grid-3 {
+  .formula-grid-3,
+  .formula-grid-symbol-11,
+  .formula-grid-symbol-9,
+  .formula-grid-symbol-7,
+  .formula-grid-symbol-5 {
     grid-template-columns: repeat(2, minmax(78px, 96px));
     justify-content: start;
+  }
+
+  .symbol {
+    min-height: auto;
+    font-size: 16px;
   }
 
   .box-wide {
@@ -399,24 +459,32 @@ details.manage-section[open] summary {
 
     <h2>上側（上から）</h2>
     <div class="card">
-      <div class="small">見付け ＋ 隙間 ＋ 基準 ＋ 丁番 = 上丁番</div>
-      <div class="formula-grid">
+      <div class="small">見付け ＋ 隙間 ＋ 基準 ＋ 丁番 ＝ 上丁番</div>
+      <div class="formula-grid-symbol-9">
         <div>
           <div class="label">見付け</div>
           <input id="topMituke" class="frame" value="25" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">隙間</div>
           <input id="topGap" class="gap" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">基準</div>
           <input id="topBase" class="door" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">丁番</div>
           <input id="hingeValueViewTop" class="hinge" readonly>
         </div>
+        <div class="symbol">＝</div>
+
         <div>
           <div class="label">上丁番</div>
           <input id="topDim" class="total" readonly>
@@ -426,28 +494,38 @@ details.manage-section[open] summary {
 
     <h2>下側（下から）</h2>
     <div class="card">
-      <div class="small">沓摺① ＋ 沓摺② ＋ 隙間 ＋ 基準 － 丁番 = 下丁番</div>
-      <div class="formula-grid-6">
+      <div class="small">沓摺① ＋ 沓摺② ＋ 隙間 ＋ 基準 － 丁番 ＝ 下丁番</div>
+      <div class="formula-grid-symbol-11">
         <div>
           <div class="label">沓摺①</div>
           <input id="bottomSill1" class="frame" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">沓摺②</div>
           <input id="bottomSill2" class="frame" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">隙間</div>
           <input id="bottomGap" class="gap" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">基準</div>
           <input id="bottomBase" class="door" inputmode="decimal">
         </div>
+        <div class="symbol">－</div>
+
         <div>
           <div class="label">丁番</div>
           <input id="hingeValueViewBottom" class="hinge" readonly>
         </div>
+        <div class="symbol">＝</div>
+
         <div>
           <div class="label">下丁番</div>
           <input id="bottomDim" class="total" readonly>
@@ -457,7 +535,7 @@ details.manage-section[open] summary {
 
     <h2>DH・枠全長</h2>
     <div class="card">
-      <div class="small">枠全長 = 見付け + 上隙間 + DH + 下隙間 + 沓摺り合計</div>
+      <div class="small">枠全長 ＝ 見付け ＋ 上隙間 ＋ DH ＋ 下隙間 ＋ 沓摺り合計</div>
       <div class="formula-grid-4">
         <div>
           <div class="label">DH</div>
@@ -507,36 +585,47 @@ details.manage-section[open] summary {
 
     <h2>ストライク（下から）</h2>
     <div class="card">
-      <div class="small">枠下端～Hまで① ＋ 枠下端～Hまで② ＋ 基準値 － 下端 = 位置</div>
-      <div class="formula-grid-6">
+      <div class="small">枠下端～Hまで① ＋ 枠下端～Hまで② ＋ 基準値 － 下端 ＝ 位置</div>
+      <div class="formula-grid-symbol-11">
         <div>
           <div class="label">枠下端～Hまで①</div>
           <input id="strikeFromBottom1" class="frame" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">枠下端～Hまで②</div>
           <input id="strikeFromBottom2" class="frame" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">基準値</div>
           <input id="strikeBase" class="door" inputmode="decimal">
         </div>
+        <div class="symbol">－</div>
+
         <div>
           <div class="label">下端</div>
           <input id="strikeOffsetView" class="strike" readonly>
         </div>
+        <div class="symbol">＝</div>
+
         <div>
           <div class="label">位置</div>
           <input id="strikeResult" class="total" readonly>
         </div>
+
         <div>
           <div class="label">高さ</div>
           <input id="strikeHeightView" class="strike" readonly>
         </div>
+
         <div>
           <div class="label">上端</div>
           <input id="strikeTop" class="total" readonly>
         </div>
+
         <div>
           <div class="label">中心</div>
           <input id="strikeCenter" class="total" readonly>
@@ -545,16 +634,20 @@ details.manage-section[open] summary {
 
       <div class="section-divider"></div>
 
-      <div class="small">厚み － 枠板厚 = 必要スペーサー</div>
-      <div class="formula-grid-4">
+      <div class="small">厚み － 枠板厚 ＝ 必要スペーサー</div>
+      <div class="formula-grid-symbol-5">
         <div>
           <div class="label">厚み</div>
           <input id="strikeThicknessView" class="strike" readonly>
         </div>
+        <div class="symbol">－</div>
+
         <div>
           <div class="label">枠板厚</div>
           <input id="frameThickness" class="frame" inputmode="decimal">
         </div>
+        <div class="symbol">＝</div>
+
         <div>
           <div class="label">スペーサー</div>
           <input id="spacerResult" class="total" readonly>
@@ -605,24 +698,32 @@ details.manage-section[open] summary {
 
     <h2>フランス落とし</h2>
     <div class="card">
-      <div class="small">親W ＋ 召合わせ/2 ＋ フランス落とし = 位置</div>
-      <div class="formula-grid">
+      <div class="small">親W ＋ 召合わせ → 召合わせ/2 ＋ フランス落とし ＝ 位置</div>
+      <div class="formula-grid-symbol-9">
         <div>
           <div class="label">親W</div>
           <input id="parentW" class="door" inputmode="decimal">
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">召合わせ</div>
           <input id="meetingInput" class="frame" inputmode="decimal">
         </div>
+        <div class="symbol">→</div>
+
         <div>
           <div class="label">召合わせ/2</div>
           <input id="meetingHalf" class="total" readonly>
         </div>
+        <div class="symbol">＋</div>
+
         <div>
           <div class="label">フランス落とし</div>
           <input id="flushValueView" class="flush" readonly>
         </div>
+        <div class="symbol">＝</div>
+
         <div>
           <div class="label">位置</div>
           <input id="flushResult" class="total" readonly>
@@ -731,12 +832,12 @@ details.manage-section[open] summary {
 </div>
 
 <script>
-const HINGE_STORAGE_KEY = "hingeCalculatorFullV1";
-const HINGE_SELECTED_KEY = "hingeCalculatorSelectedHingeFullV1";
-const STRIKE_STORAGE_KEY = "hingeCalculatorStrikesFullV1";
-const STRIKE_SELECTED_KEY = "hingeCalculatorSelectedStrikeFullV1";
-const FLUSH_STORAGE_KEY = "hingeCalculatorFlushesFullV1";
-const FLUSH_SELECTED_KEY = "hingeCalculatorSelectedFlushFullV1";
+const HINGE_STORAGE_KEY = "hingeCalculatorFullV2";
+const HINGE_SELECTED_KEY = "hingeCalculatorSelectedHingeFullV2";
+const STRIKE_STORAGE_KEY = "hingeCalculatorStrikesFullV2";
+const STRIKE_SELECTED_KEY = "hingeCalculatorSelectedStrikeFullV2";
+const FLUSH_STORAGE_KEY = "hingeCalculatorFlushesFullV2";
+const FLUSH_SELECTED_KEY = "hingeCalculatorSelectedFlushFullV2";
 
 let hinges = [];
 let strikes = [];
@@ -786,9 +887,11 @@ function toHalfWidth(str) {
     .replace(/，/g, ".")
     .replace(/　/g, " ");
 }
+
 function normalizeNumberInputValue(v) {
   return toHalfWidth(v).replace(/[^\d.\-,]/g, "");
 }
+
 function getVal(id) {
   const el = document.getElementById(id);
   let v = el.value;
@@ -797,21 +900,25 @@ function getVal(id) {
   if (v === "" || v === "-" || v === "." || v === "-.") return 0;
   return Number(v) || 0;
 }
+
 function setValue(id, val) {
   document.getElementById(id).value = (val || val === 0) ? val : "";
 }
+
 function showMessage(id, text, type) {
   const box = document.getElementById(id);
   box.textContent = text;
   box.className = "message " + type;
   box.style.display = "block";
 }
+
 function clearMessage(id) {
   const box = document.getElementById(id);
   box.textContent = "";
   box.style.display = "none";
   box.className = "message";
 }
+
 function escapeHtml(str) {
   return String(str)
     .replaceAll("&", "&amp;")
@@ -820,6 +927,7 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
 function normalizeHinge(item) {
   return { name: String(item.name).trim(), value: Number(item.value), isDefault: Boolean(item.isDefault) };
 }
@@ -969,11 +1077,13 @@ function getSelectedHinge() {
   if (!Number.isInteger(idx) || idx < 0 || idx >= hinges.length) return null;
   return hinges[idx];
 }
+
 function getSelectedStrike() {
   const idx = Number(document.getElementById("strikeSelect").value);
   if (!Number.isInteger(idx) || idx < 0 || idx >= strikes.length) return null;
   return strikes[idx];
 }
+
 function getSelectedFlush() {
   const idx = Number(document.getElementById("flushSelect").value);
   if (!Number.isInteger(idx) || idx < 0 || idx >= flushes.length) return null;

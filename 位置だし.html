@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#222222">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="金物計算">
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<title>丁番・ストライク・フランス落とし位置計算</title>
+
+<style>
+:root {
+  --bg: #f3f3f3;
+  --card: #ffffff;
+  --border: #d8d8d8;
+  --text: #222;
+  --sub: #666;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px 10px 24px;
+}
+
+.wrapper {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 6px 0 14px;
+  font-size: 22px;
+  text-align: center;
+}
+
+h2 {
+  margin: 18px 0 10px;
+  font-size: 17px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.small {
+  font-size: 12px;
+  color: var(--sub);
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+
+.row-compact {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+
+.box, .box-wide {
+  min-width: 0;
+}
+
+.box-wide {
+  grid-column: span 2;
+}
+
+.label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #444;
+  text-align: left;
+  padding-left: 2px;
+}
+
+input, select, button {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 12px;
+  border: 1px solid #c9c9c9;
+  font-size: 16px;
+  background: #fff;
+  color: #222;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input, select {
+  padding: 10px 10px;
+  text-align: center;
+}
+
+input[readonly] {
+  background: #fafafa;
+  color: #333;
+}
+
+button {
+  padding: 10px 8px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  font-size: 22px;
+  color: #444;
+  user-select: none;
+}
+
+.frame   { background: #dce9f5; }
+.gap     { background: #dfeadf; }
+.door    { background: #efe3cd; }
+.hinge   { background: #f6e3e6; }
+.strike  { background: #ede7f6; }
+.flush   { background: #fff8d6; }
+.total   { background: #f7f7f7; }
+
+.main-select {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.result-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  white-space: pre-line;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.message {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  text-align: center;
+  display: none;
+}
+
+.message.ok {
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  color: #256029;
+}
+
+.message.warn {
+  background: #fff3e0;
+  border: 1px solid #ffcc80;
+  color: #8a5200;
+}
+
+.message.info {
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  color: #0d47a1;
+}
+
+.btn-add { background: #f5fff5; }
+.btn-delete { background: #fff7f7; }
+
+.section-gap {
+  margin-top: 6px;
+}
+
+.footer-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.top-result-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(8px);
+  border: 1px solid #d8d8d8;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.top-result-title {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.top-result-values {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.tab-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+  position: sticky;
+  top: 68px;
+  z-index: 35;
+  background: var(--bg);
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  min-height: 42px;
+  border-radius: 12px;
+  border: 1px solid #cfcfcf;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.tab-btn.active {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+details.manage-group {
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+
+details.manage-group summary {
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+details.manage-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.manage-inner {
+  margin-top: 10px;
+}
+
+.install-note {
+  background: #fff8d6;
+  border: 1px solid #eadf9b;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .box-wide {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 560px) {
+  .tab-bar {
+    grid-template-columns: repeat(2, 1fr);
+    top: 66px;
+  }
+
+  .row,
+  .row-compact {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .symbol {
+    display: none;
+  }
+
+  .box,
+  .box-wide {
+    grid-column: auto !important;
+  }
+
+  .box-wide {
+    grid-column: span 2 !important;
+  }
+
+  .result-card {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <h1>丁番・ストライク・フランス落とし位置計算</h1>
+
+  <div class="install-note">
+    Safariで開いて、共有 → 「ホーム画面に追加」でアプリっぽく使えます
+  </div>
+
+  <div class="top-result-bar">
+    <div class="top-result-title">主要結果</div>
+    <div id="quickResult" class="top-result-values">未入力</div>
+  </div>
+
+  <div class="tab-bar">
+    <button type="button" class="tab-btn active" data-tab="tab-hinge">丁番</button>
+    <button type="button" class="tab-btn" data-tab="tab-strike">ストライク</button>
+    <button type="button" class="tab-btn" data-tab="tab-flush">フランス落とし</button>
+    <button type="button" class="tab-btn" data-tab="tab-manage">追加削除</button>
+  </div>
+
+  <div id="tab-hinge" class="tab-panel active">
+    <h2>丁番の種類</h2>
+    <div class="card">
+      <div class="row">
+        <div class="box-wide">
+          <div class="label">種類</div>
+          <select id="hingeSelect" class="hinge main-select"></select>
+        </div>
+      </div>
+    </div>
+
+    <h2>上側（上から）</h2>
+    <div class="card">
+      <div class="row">
+        <div class="box">
+          <div class="label">見付け</div>
+          <input id="topMituke" class="frame" value="25" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">隙間</div>
+          <input id="topGap" class="gap" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">基準</div>
+          <input id="topBase" class="door" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">丁番</div>
+          <input id="hingeValueViewTop" class="hinge" readonly>
+        </div>
+
+        <div class="symbol">＝</div>
+
+        <div class="box">
+          <div class="label">上丁番</div>
+          <input id="topDim" class="total" readonly>
+        </div>
+      </div>
+    </div>
+
+    <h2>下側（下から）</h2>
+    <div class="card">
+      <div class="row">
+        <div class="box">
+          <div class="label">沓摺①</div>
+          <input id="bottomSill1" class="frame" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">沓摺②</div>
+          <input id="bottomSill2" class="frame" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">隙間</div>
+          <input id="bottomGap" class="gap" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">基準</div>
+          <input id="bottomBase" class="door" inputmode="decimal">
+        </div>
+
+        <div class="symbol">－</div>
+
+        <div class="box">
+          <div class="label">丁番</div>
+          <input id="hingeValueViewBottom" class="hinge" readonly>
+        </div>
+
+        <div class="symbol">＝</div>
+
+        <div class="box">
+          <div class="label">下丁番</div>
+          <input id="bottomDim" class="total" readonly>
+        </div>
+      </div>
+    </div>
+
+    <h2>DH・枠全長</h2>
+    <div class="card">
+      <div class="small">枠全長 = 見付け + 上隙間 + DH + 下隙間 + 沓摺り合計</div>
+      <div class="row">
+        <div class="box">
+          <div class="label">DH</div>
+          <input id="dh" class="door" inputmode="decimal">
+        </div>
+
+        <div class="symbol">→</div>
+
+        <div class="box">
+          <div class="label">枠全長</div>
+          <input id="frameLength" class="total" readonly>
+        </div>
+      </div>
+    </div>
+
+    <h2>丁番枚数</h2>
+    <div class="card">
+      <div class="row">
+        <div class="box">
+          <div class="label">枚数</div>
+          <input id="hingeCount" class="door" inputmode="numeric" pattern="[0-9]*">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-strike" class="tab-panel">
+    <h2>ストライクの種類</h2>
+    <div class="card">
+      <div class="row">
+        <div class="box-wide">
+          <div class="label">種類</div>
+          <select id="strikeSelect" class="strike main-select"></select>
+        </div>
+      </div>
+    </div>
+
+    <h2>ストライク（下から）</h2>
+    <div class="card">
+      <div class="small">ストライク位置 = 枠下端① + 枠下端② + 基準値 − ストライク下端</div>
+      <div class="row">
+        <div class="box">
+          <div class="label">枠下端①</div>
+          <input id="strikeFromBottom1" class="frame" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">枠下端②</div>
+          <input id="strikeFromBottom2" class="frame" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">基準値</div>
+          <input id="strikeBase" class="door" inputmode="decimal">
+        </div>
+
+        <div class="symbol">－</div>
+
+        <div class="box">
+          <div class="label">下端</div>
+          <input id="strikeOffsetView" class="strike" readonly>
+        </div>
+
+        <div class="symbol">＝</div>
+
+        <div class="box">
+          <div class="label">位置</div>
+          <input id="strikeResult" class="total" readonly>
+        </div>
+
+        <div class="box">
+          <div class="label">高さ</div>
+          <input id="strikeHeightView" class="strike" readonly>
+        </div>
+
+        <div class="box">
+          <div class="label">上端</div>
+          <input id="strikeTop" class="total" readonly>
+        </div>
+
+        <div class="box">
+          <div class="label">中心</div>
+          <input id="strikeCenter" class="total" readonly>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-flush" class="tab-panel">
+    <h2>フランス落としの種類</h2>
+    <div class="card">
+      <div class="row">
+        <div class="box-wide">
+          <div class="label">種類</div>
+          <select id="flushSelect" class="flush main-select"></select>
+        </div>
+      </div>
+    </div>
+
+    <h2>フランス落とし</h2>
+    <div class="card">
+      <div class="small">親W + 召合わせ + フランス落とし　※召合わせは自動で半分</div>
+      <div class="row">
+        <div class="box">
+          <div class="label">親W</div>
+          <input id="parentW" class="door" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">召合わせ</div>
+          <input id="meetingInput" class="frame" inputmode="decimal">
+        </div>
+
+        <div class="symbol">＝</div>
+
+        <div class="box">
+          <div class="label">召合わせ/2</div>
+          <input id="meetingHalf" class="total" readonly>
+        </div>
+
+        <div class="symbol">＋</div>
+
+        <div class="box">
+          <div class="label">フランス落とし</div>
+          <input id="flushValueView" class="flush" readonly>
+        </div>
+
+        <div class="symbol">＝</div>
+
+        <div class="box">
+          <div class="label">位置</div>
+          <input id="flushResult" class="total" readonly>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-manage" class="tab-panel">
+    <details class="manage-group">
+      <summary>丁番追加・削除</summary>
+      <div class="manage-inner">
+        <div class="row-compact">
+          <div class="box">
+            <div class="label">名前</div>
+            <input id="newHingeName">
+          </div>
+
+          <div class="box">
+            <div class="label">値</div>
+            <input id="newHingeValue" class="hinge" inputmode="decimal">
+          </div>
+
+          <div class="box">
+            <div class="label">追加</div>
+            <button type="button" id="addHingeBtn" class="btn-add">＋ 追加</button>
+          </div>
+
+          <div class="box">
+            <div class="label">削除</div>
+            <button type="button" id="deleteHingeBtn" class="btn-delete">－ 削除</button>
+          </div>
+        </div>
+        <div id="hingeMessage" class="message"></div>
+      </div>
+    </details>
+
+    <details class="manage-group">
+      <summary>ストライク追加・削除</summary>
+      <div class="manage-inner">
+        <div class="row-compact">
+          <div class="box">
+            <div class="label">名前</div>
+            <input id="newStrikeName">
+          </div>
+
+          <div class="box">
+            <div class="label">下端</div>
+            <input id="newStrikeOffset" class="strike" inputmode="decimal">
+          </div>
+
+          <div class="box">
+            <div class="label">高さ</div>
+            <input id="newStrikeHeight" class="strike" inputmode="decimal">
+          </div>
+
+          <div class="box">
+            <div class="label">追加</div>
+            <button type="button" id="addStrikeBtn" class="btn-add">＋ 追加</button>
+          </div>
+        </div>
+
+        <div class="section-gap"></div>
+
+        <div class="row">
+          <div class="box">
+            <div class="label">削除</div>
+            <button type="button" id="deleteStrikeBtn" class="btn-delete">－ 選択中を削除</button>
+          </div>
+        </div>
+
+        <div id="strikeMessage" class="message"></div>
+      </div>
+    </details>
+
+    <details class="manage-group">
+      <summary>フランス落とし追加・削除</summary>
+      <div class="manage-inner">
+        <div class="row-compact">
+          <div class="box">
+            <div class="label">名前</div>
+            <input id="newFlushName">
+          </div>
+
+          <div class="box">
+            <div class="label">値</div>
+            <input id="newFlushValue" class="flush" inputmode="decimal">
+          </div>
+
+          <div class="box">
+            <div class="label">追加</div>
+            <button type="button" id="addFlushBtn" class="btn-add">＋ 追加</button>
+          </div>
+
+          <div class="box">
+            <div class="label">削除</div>
+            <button type="button" id="deleteFlushBtn" class="btn-delete">－ 削除</button>
+          </div>
+        </div>
+        <div id="flushMessage" class="message"></div>
+      </div>
+    </details>
+  </div>
+
+  <h2>結果</h2>
+  <div id="resultText" class="result-card">※ 必要項目を入力してください</div>
+
+  <div class="footer-note">
+    ※ iPhoneのSafari向けに調整済み<br>
+    ※ 召合わせは自動で半分計算されます
+  </div>
+
+</div>
+
+<script>
+const HINGE_STORAGE_KEY = "hingeCalculatorHingesPWA1";
+const HINGE_SELECTED_KEY = "hingeCalculatorSelectedHingePWA1";
+const STRIKE_STORAGE_KEY = "hingeCalculatorStrikesPWA1";
+const STRIKE_SELECTED_KEY = "hingeCalculatorSelectedStrikePWA1";
+const FLUSH_STORAGE_KEY = "hingeCalculatorFlushesPWA1";
+const FLUSH_SELECTED_KEY = "hingeCalculatorSelectedFlushPWA1";
+
+function storageAvailable() {
+  try {
+    const test = "__storage_test__";
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const canUseStorage = storageAvailable();
+
+function safeGet(key) {
+  if (!canUseStorage) return null;
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeSet(key, value) {
+  if (!canUseStorage) return;
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
+}
+
+function toHalfWidth(str) {
+  return String(str)
+    .replace(/[０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 65248))
+    .replace(/－/g, "-")
+    .replace(/−/g, "-")
+    .replace(/ー/g, "-")
+    .replace(/．/g, ".")
+    .replace(/，/g, ".")
+    .replace(/　/g, " ");
+}
+
+function normalizeNumberInputValue(v) {
+  return toHalfWidth(v).replace(/[^\d.\-]/g, "");
+}
+
+function getVal(id) {
+  const el = document.getElementById(id);
+  let v = el.value;
+  if (!v) return 0;
+  v = normalizeNumberInputValue(v).trim();
+  if (v === "" || v === "-" || v === "." || v === "-.") return 0;
+  return Number(v) || 0;
+}
+
+function setValue(id, val) {
+  document.getElementById(id).value = (val || val === 0) ? val : "";
+}
+
+function showMessage(id, text, type) {
+  const box = document.getElementById(id);
+  box.textContent = text;
+  box.className = "message " + type;
+  box.style.display = "block";
+}
+
+function clearMessage(id) {
+  const box = document.getElementById(id);
+  box.textContent = "";
+  box.style.display = "none";
+  box.className = "message";
+}
+
+function normalizeHinge(item) {
+  return {
+    name: String(item.name).trim(),
+    value: Number(item.value),
+    isDefault: Boolean(item.isDefault)
+  };
+}
+
+function normalizeStrike(item) {
+  return {
+    name: String(item.name).trim(),
+    offset: Number(item.offset),
+    height: Number(item.height),
+    isDefault: Boolean(item.isDefault)
+  };
+}
+
+function normalizeFlush(item) {
+  return {
+    name: String(item.name).trim(),
+    value: Number(item.value),
+    isDefault: Boolean(item.isDefault)
+  };
+}
+
+const defaultHinges = [
+  { name: "DH-508S（3+12）", value: 15, isDefault: true },
+  { name: "401-SL501（1+13）", value: 14, isDefault: true }
+];
+let hinges = [];
+
+function loadSavedHinges() {
+  try {
+    const raw = safeGet(HINGE_STORAGE_KEY);
+    if (!raw) {
+      hinges = defaultHinges.map(normalizeHinge);
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      hinges = defaultHinges.map(normalizeHinge);
+      return;
+    }
+    hinges = parsed
+      .filter(item =>
+        item &&
+        typeof item.name === "string" &&
+        item.name.trim() !== "" &&
+        Number.isFinite(Number(item.value))
+      )
+      .map(normalizeHinge);
+
+    defaultHinges.forEach(def => {
+      const exists = hinges.some(h => h.name === def.name && Number(h.value) === Number(def.value));
+      if (!exists) hinges.unshift(normalizeHinge(def));
+    });
+  } catch {
+    hinges = defaultHinges.map(normalizeHinge);
+  }
+}
+
+function saveHinges() {
+  safeSet(HINGE_STORAGE_KEY, JSON.stringify(hinges));
+}
+
+function loadHingeOptions() {
+  const select = document.getElementById("hingeSelect");
+  const selectedBefore = select.value || safeGet(HINGE_SELECTED_KEY) || "";
+  select.innerHTML = "";
+
+  hinges.forEach((h, index) => {
+    const label = h.isDefault ? `${h.name}（標準）` : h.name;
+    select.add(new Option(label, index));
+  });
+
+  if (selectedBefore !== "") {
+    const idx = Number(selectedBefore);
+    if (Number.isInteger(idx) && idx >= 0 && idx < hinges.length) {
+      select.value = String(idx);
+    }
+  }
+
+  if (!select.value && hinges.length > 0) select.selectedIndex = 0;
+  safeSet(HINGE_SELECTED_KEY, select.value);
+}
+
+function getSelectedHinge() {
+  const idx = Number(document.getElementById("hingeSelect").value);
+  if (!Number.isInteger(idx) || idx < 0 || idx >= hinges.length) return null;
+  return hinges[idx];
+}
+
+function addHinge() {
+  clearMessage("hingeMessage");
+
+  const name = document.getElementById("newHingeName").value.trim();
+  const value = getVal("newHingeValue");
+
+  if (!name) {
+    showMessage("hingeMessage", "名前を入力してください", "warn");
+    return;
+  }
+
+  if (!Number.isFinite(value) || value === 0) {
+    showMessage("hingeMessage", "値を入力してください", "warn");
+    return;
+  }
+
+  if (hinges.some(h => h.name.trim().toLowerCase() === name.toLowerCase())) {
+    showMessage("hingeMessage", "登録済みです（同じ名前）", "warn");
+    return;
+  }
+
+  if (hinges.some(h => Number(h.value) === Number(value))) {
+    showMessage("hingeMessage", "登録済みです（同じ値）", "warn");
+    return;
+  }
+
+  hinges.push({ name, value, isDefault: false });
+  saveHinges();
+  loadHingeOptions();
+
+  const newIndex = hinges.length - 1;
+  document.getElementById("hingeSelect").value = String(newIndex);
+  safeSet(HINGE_SELECTED_KEY, String(newIndex));
+
+  document.getElementById("newHingeName").value = "";
+  document.getElementById("newHingeValue").value = "";
+
+  showMessage("hingeMessage", "追加しました", "ok");
+  calc();
+}
+
+function deleteSelectedHinge() {
+  clearMessage("hingeMessage");
+
+  const selected = getSelectedHinge();
+  if (!selected) {
+    showMessage("hingeMessage", "削除する丁番を選択してください", "warn");
+    return;
+  }
+  if (selected.isDefault) {
+    showMessage("hingeMessage", "標準の丁番は削除できません", "warn");
+    return;
+  }
+
+  const idx = Number(document.getElementById("hingeSelect").value);
+  hinges.splice(idx, 1);
+  saveHinges();
+  loadHingeOptions();
+  showMessage("hingeMessage", "削除しました", "info");
+  calc();
+}
+
+const defaultStrikes = [
+  { name: "LA", offset: 22.5, height: 110, isDefault: true }
+];
+let strikes = [];
+
+function loadSavedStrikes() {
+  try {
+    const raw = safeGet(STRIKE_STORAGE_KEY);
+    if (!raw) {
+      strikes = defaultStrikes.map(normalizeStrike);
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      strikes = defaultStrikes.map(normalizeStrike);
+      return;
+    }
+    strikes = parsed
+      .filter(item =>
+        item &&
+        typeof item.name === "string" &&
+        item.name.trim() !== "" &&
+        Number.isFinite(Number(item.offset)) &&
+        Number.isFinite(Number(item.height))
+      )
+      .map(normalizeStrike);
+
+    defaultStrikes.forEach(def => {
+      const exists = strikes.some(s =>
+        s.name === def.name &&
+        Number(s.offset) === Number(def.offset) &&
+        Number(s.height) === Number(def.height)
+      );
+      if (!exists) strikes.unshift(normalizeStrike(def));
+    });
+  } catch {
+    strikes = defaultStrikes.map(normalizeStrike);
+  }
+}
+
+function saveStrikes() {
+  safeSet(STRIKE_STORAGE_KEY, JSON.stringify(strikes));
+}
+
+function loadStrikeOptions() {
+  const select = document.getElementById("strikeSelect");
+  const selectedBefore = select.value || safeGet(STRIKE_SELECTED_KEY) || "";
+  select.innerHTML = "";
+
+  strikes.forEach((s, index) => {
+    const label = s.isDefault ? `${s.name}（標準）` : s.name;
+    select.add(new Option(label, index));
+  });
+
+  if (selectedBefore !== "") {
+    const idx = Number(selectedBefore);
+    if (Number.isInteger(idx) && idx >= 0 && idx < strikes.length) {
+      select.value = String(idx);
+    }
+  }
+
+  if (!select.value && strikes.length > 0) select.selectedIndex = 0;
+  safeSet(STRIKE_SELECTED_KEY, select.value);
+}
+
+function getSelectedStrike() {
+  const idx = Number(document.getElementById("strikeSelect").value);
+  if (!Number.isInteger(idx) || idx < 0 || idx >= strikes.length) return null;
+  return strikes[idx];
+}
+
+function addStrike() {
+  clearMessage("strikeMessage");
+
+  const name = document.getElementById("newStrikeName").value.trim();
+  const offset = getVal("newStrikeOffset");
+  const height = getVal("newStrikeHeight");
+
+  if (!name) {
+    showMessage("strikeMessage", "名前を入力してください", "warn");
+    return;
+  }
+
+  if (!Number.isFinite(offset) || !Number.isFinite(height) || offset === 0 || height === 0) {
+    showMessage("strikeMessage", "下端と高さを入力してください", "warn");
+    return;
+  }
+
+  if (strikes.some(s => s.name.trim().toLowerCase() === name.toLowerCase())) {
+    showMessage("strikeMessage", "登録済みです（同じ名前）", "warn");
+    return;
+  }
+
+  if (strikes.some(s => Number(s.offset) === Number(offset) && Number(s.height) === Number(height))) {
+    showMessage("strikeMessage", "登録済みです（同じ下端・高さ）", "warn");
+    return;
+  }
+
+  strikes.push({ name, offset, height, isDefault: false });
+  saveStrikes();
+  loadStrikeOptions();
+
+  const newIndex = strikes.length - 1;
+  document.getElementById("strikeSelect").value = String(newIndex);
+  safeSet(STRIKE_SELECTED_KEY, String(newIndex));
+
+  document.getElementById("newStrikeName").value = "";
+  document.getElementById("newStrikeOffset").value = "";
+  document.getElementById("newStrikeHeight").value = "";
+
+  showMessage("strikeMessage", "追加しました", "ok");
+  calc();
+}
+
+function deleteSelectedStrike() {
+  clearMessage("strikeMessage");
+
+  const selected = getSelectedStrike();
+  if (!selected) {
+    showMessage("strikeMessage", "削除するストライクを選択してください", "warn");
+    return;
+  }
+  if (selected.isDefault) {
+    showMessage("strikeMessage", "標準のストライクは削除できません", "warn");
+    return;
+  }
+
+  const idx = Number(document.getElementById("strikeSelect").value);
+  strikes.splice(idx, 1);
+  saveStrikes();
+  loadStrikeOptions();
+  showMessage("strikeMessage", "削除しました", "info");
+  calc();
+}
+
+const defaultFlushes = [
+  { name: "DE6VN", value: 18.5, isDefault: true },
+  { name: "DC800", value: 20.5, isDefault: true }
+];
+let flushes = [];
+
+function loadSavedFlushes() {
+  try {
+    const raw = safeGet(FLUSH_STORAGE_KEY);
+    if (!raw) {
+      flushes = defaultFlushes.map(normalizeFlush);
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      flushes = defaultFlushes.map(normalizeFlush);
+      return;
+    }
+    flushes = parsed
+      .filter(item =>
+        item &&
+        typeof item.name === "string" &&
+        item.name.trim() !== "" &&
+        Number.isFinite(Number(item.value))
+      )
+      .map(normalizeFlush);
+
+    defaultFlushes.forEach(def => {
+      const exists = flushes.some(f => f.name === def.name && Number(f.value) === Number(def.value));
+      if (!exists) flushes.unshift(normalizeFlush(def));
+    });
+  } catch {
+    flushes = defaultFlushes.map(normalizeFlush);
+  }
+}
+
+function saveFlushes() {
+  safeSet(FLUSH_STORAGE_KEY, JSON.stringify(flushes));
+}
+
+function loadFlushOptions() {
+  const select = document.getElementById("flushSelect");
+  const selectedBefore = select.value || safeGet(FLUSH_SELECTED_KEY) || "";
+  select.innerHTML = "";
+
+  flushes.forEach((f, index) => {
+    const label = f.isDefault ? `${f.name}（標準）` : f.name;
+    select.add(new Option(label, index));
+  });
+
+  if (selectedBefore !== "") {
+    const idx = Number(selectedBefore);
+    if (Number.isInteger(idx) && idx >= 0 && idx < flushes.length) {
+      select.value = String(idx);
+    }
+  }
+
+  if (!select.value && flushes.length > 0) select.selectedIndex = 0;
+  safeSet(FLUSH_SELECTED_KEY, select.value);
+}
+
+function getSelectedFlush() {
+  const idx = Number(document.getElementById("flushSelect").value);
+  if (!Number.isInteger(idx) || idx < 0 || idx >= flushes.length) return null;
+  return flushes[idx];
+}
+
+function addFlush() {
+  clearMessage("flushMessage");
+
+  const name = document.getElementById("newFlushName").value.trim();
+  const value = getVal("newFlushValue");
+
+  if (!name) {
+    showMessage("flushMessage", "名前を入力してください", "warn");
+    return;
+  }
+
+  if (!Number.isFinite(value) || value === 0) {
+    showMessage("flushMessage", "値を入力してください", "warn");
+    return;
+  }
+
+  if (flushes.some(f => f.name.trim().toLowerCase() === name.toLowerCase())) {
+    showMessage("flushMessage", "登録済みです（同じ名前）", "warn");
+    return;
+  }
+
+  if (flushes.some(f => Number(f.value) === Number(value))) {
+    showMessage("flushMessage", "登録済みです（同じ値）", "warn");
+    return;
+  }
+
+  flushes.push({ name, value, isDefault: false });
+  saveFlushes();
+  loadFlushOptions();
+
+  const newIndex = flushes.length - 1;
+  document.getElementById("flushSelect").value = String(newIndex);
+  safeSet(FLUSH_SELECTED_KEY, String(newIndex));
+
+  document.getElementById("newFlushName").value = "";
+  document.getElementById("newFlushValue").value = "";
+
+  showMessage("flushMessage", "追加しました", "ok");
+  calc();
+}
+
+function deleteSelectedFlush() {
+  clearMessage("flushMessage");
+
+  const selected = getSelectedFlush();
+  if (!selected) {
+    showMessage("flushMessage", "削除するフランス落としを選択してください", "warn");
+    return;
+  }
+  if (selected.isDefault) {
+    showMessage("flushMessage", "標準のフランス落としは削除できません", "warn");
+    return;
+  }
+
+  const idx = Number(document.getElementById("flushSelect").value);
+  flushes.splice(idx, 1);
+  saveFlushes();
+  loadFlushOptions();
+  showMessage("flushMessage", "削除しました", "info");
+  calc();
+}
+
+function switchTab(tabId) {
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.tab === tabId);
+  });
+
+  document.querySelectorAll(".tab-panel").forEach(panel => {
+    panel.classList.toggle("active", panel.id === tabId);
+  });
+}
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    switchTab(btn.dataset.tab);
+  });
+});
+
+function calc() {
+  const topMituke = getVal("topMituke");
+  const topGap = getVal("topGap");
+  const topBase = getVal("topBase");
+
+  const bottomSill =
+    getVal("bottomSill1") +
+    getVal("bottomSill2");
+
+  const bottomGap = getVal("bottomGap");
+  const bottomBase = getVal("bottomBase");
+
+  const dh = getVal("dh");
+  const count = Math.floor(getVal("hingeCount"));
+
+  const selectedHinge = getSelectedHinge();
+  const hingeValue = selectedHinge ? Number(selectedHinge.value) : 0;
+
+  setValue("hingeValueViewTop", hingeValue || "");
+  setValue("hingeValueViewBottom", hingeValue || "");
+
+  const topDim = topMituke + topGap + topBase + hingeValue;
+  const bottomDim = bottomSill + bottomGap + bottomBase - hingeValue;
+  const frameLength = topMituke + topGap + dh + bottomGap + bottomSill;
+
+  setValue("topDim", topDim || "");
+  setValue("bottomDim", bottomDim || "");
+  setValue("frameLength", frameLength || "");
+
+  const selectedStrike = getSelectedStrike();
+  const strikeOffset = selectedStrike ? Number(selectedStrike.offset) : 0;
+  const strikeHeight = selectedStrike ? Number(selectedStrike.height) : 0;
+
+  setValue("strikeOffsetView", strikeOffset || "");
+  setValue("strikeHeightView", strikeHeight || "");
+
+  const strikeFromBottom =
+    getVal("strikeFromBottom1") +
+    getVal("strikeFromBottom2");
+
+  const strikeBase = getVal("strikeBase");
+  const strikeResult = strikeFromBottom + strikeBase - strikeOffset;
+
+  setValue("strikeResult", strikeResult || "");
+
+  const strikeTop = strikeResult + strikeHeight;
+  const strikeCenter = strikeResult + strikeHeight / 2;
+
+  setValue("strikeTop", strikeTop || "");
+  setValue("strikeCenter", strikeCenter || "");
+
+  const selectedFlush = getSelectedFlush();
+  const flushValue = selectedFlush ? Number(selectedFlush.value) : 0;
+  setValue("flushValueView", flushValue || "");
+
+  const parentW = getVal("parentW");
+  const meetingInput = getVal("meetingInput");
+  const meetingHalf = meetingInput / 2;
+  const flushResult = parentW + meetingHalf + flushValue;
+
+  setValue("meetingHalf", meetingHalf || "");
+  setValue("flushResult", flushResult || "");
+
+  safeSet(HINGE_SELECTED_KEY, document.getElementById("hingeSelect").value);
+  safeSet(STRIKE_SELECTED_KEY, document.getElementById("strikeSelect").value);
+  safeSet(FLUSH_SELECTED_KEY, document.getElementById("flushSelect").value);
+
+  const result = document.getElementById("resultText");
+
+  let text = "";
+
+  if (frameLength > 0 && topDim > 0 && bottomDim > 0 && count >= 2) {
+    const usableLength = frameLength - topDim - bottomDim;
+
+    if (usableLength < 0) {
+      text += "■ 丁番\n";
+      text += "※ 枠全長より上下寸法の合計が大きくなっています\n\n";
+    } else {
+      const pitch = usableLength / (count - 1);
+      const positions = [];
+      for (let i = 0; i < count; i++) {
+        positions.push(topDim + pitch * i);
+      }
+
+      text += "■ 丁番\n";
+      text += "枠全長: " + frameLength.toFixed(1) + " mm\n";
+      text += "ピッチ: " + pitch.toFixed(1) + " mm\n";
+      positions.forEach((p, i) => {
+        text += (i + 1) + "枚目: " + p.toFixed(1) + " mm\n";
+      });
+      text += "\n";
+    }
+  } else {
+    text += "■ 丁番\n";
+    text += "※ DH・上下寸法・丁番枚数を入力してください\n\n";
+  }
+
+  text += "■ ストライク\n";
+  if (strikeResult > 0) {
+    text += "下端位置: " + strikeResult.toFixed(1) + " mm\n";
+    if (strikeHeight > 0) {
+      text += "高さ: " + strikeHeight.toFixed(1) + " mm\n";
+      text += "上端: " + strikeTop.toFixed(1) + " mm\n";
+      text += "中心: " + strikeCenter.toFixed(1) + " mm\n";
+    }
+  } else {
+    text += "※ 必要項目を入力してください\n";
+  }
+  text += "\n";
+
+  text += "■ フランス落とし\n";
+  if (flushResult > 0) {
+    text += "位置: " + flushResult.toFixed(1) + " mm\n";
+    text += "親W: " + parentW.toFixed(1) + " mm\n";
+    text += "召合わせ/2: " + meetingHalf.toFixed(1) + " mm\n";
+    text += "金物: " + flushValue.toFixed(1) + " mm\n";
+  } else {
+    text += "※ 必要項目を入力してください\n";
+  }
+  text += "\n";
+
+  text += "■ 金物位置まとめ\n";
+  if (topDim > 0) text += "上丁番: " + topDim.toFixed(1) + " mm\n";
+  if (bottomDim > 0) text += "下丁番: " + bottomDim.toFixed(1) + " mm\n";
+  if (strikeResult > 0) text += "ストライク下端: " + strikeResult.toFixed(1) + " mm\n";
+  if (strikeTop > 0) text += "ストライク上端: " + strikeTop.toFixed(1) + " mm\n";
+  if (strikeCenter > 0) text += "ストライク中心: " + strikeCenter.toFixed(1) + " mm\n";
+  if (flushResult > 0) text += "フランス落とし: " + flushResult.toFixed(1) + " mm\n";
+
+  result.textContent = text;
+
+  const quick = document.getElementById("quickResult");
+  const parts = [];
+  if (topDim > 0) parts.push("上丁番 " + topDim.toFixed(1));
+  if (bottomDim > 0) parts.push("下丁番 " + bottomDim.toFixed(1));
+  if (strikeResult > 0) parts.push("ストライク " + strikeResult.toFixed(1));
+  if (flushResult > 0) parts.push("フランス " + flushResult.toFixed(1));
+  quick.textContent = parts.length ? parts.join(" / ") + " mm" : "未入力";
+}
+
+function attachInputSanitizer(el) {
+  el.addEventListener("input", e => {
+    if (e.target.tagName === "INPUT" && !e.target.readOnly) {
+      const isNameField = ["newHingeName", "newStrikeName", "newFlushName"].includes(e.target.id);
+      if (!isNameField) {
+        e.target.value = normalizeNumberInputValue(e.target.value);
+      } else {
+        e.target.value = toHalfWidth(e.target.value);
+      }
+    }
+
+    if (!["newHingeName", "newHingeValue"].includes(e.target.id)) clearMessage("hingeMessage");
+    if (!["newStrikeName", "newStrikeOffset", "newStrikeHeight"].includes(e.target.id)) clearMessage("strikeMessage");
+    if (!["newFlushName", "newFlushValue"].includes(e.target.id)) clearMessage("flushMessage");
+
+    calc();
+  });
+
+  el.addEventListener("change", () => {
+    calc();
+  });
+}
+
+document.querySelectorAll("input, select").forEach(attachInputSanitizer);
+
+document.getElementById("addHingeBtn").addEventListener("click", addHinge);
+document.getElementById("deleteHingeBtn").addEventListener("click", deleteSelectedHinge);
+document.getElementById("addStrikeBtn").addEventListener("click", addStrike);
+document.getElementById("deleteStrikeBtn").addEventListener("click", deleteSelectedStrike);
+document.getElementById("addFlushBtn").addEventListener("click", addFlush);
+document.getElementById("deleteFlushBtn").addEventListener("click", deleteSelectedFlush);
+
+loadSavedHinges();
+loadHingeOptions();
+loadSavedStrikes();
+loadStrikeOptions();
+loadSavedFlushes();
+loadFlushOptions();
+calc();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>

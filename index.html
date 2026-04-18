@@ -79,6 +79,7 @@ h3 {
   line-height: 1.3;
 }
 
+/* iPhone Safariの勝手ズーム防止のため16px以上に固定 */
 input, select, button {
   width: 100%;
   box-sizing: border-box;
@@ -87,7 +88,7 @@ input, select, button {
   text-align: center;
   border-radius: 10px;
   border: 1px solid #c9c9c9;
-  font-size: 14px;
+  font-size: 16px;
   background: #fff;
   color: #222;
   appearance: none;
@@ -124,7 +125,7 @@ button:disabled {
 .total   { background: #f1f1f1; }
 
 .main-select {
-  font-size: 15px;
+  font-size: 16px;
   padding: 9px;
   border-width: 2px;
 }
@@ -172,7 +173,7 @@ button:disabled {
   border-radius: 12px;
   border: 1px solid #cfcfcf;
   background: #fff;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -190,7 +191,6 @@ button:disabled {
   display: block;
 }
 
-/* ここからレイアウト調整 */
 .formula-grid,
 .formula-grid-6,
 .formula-grid-4,
@@ -411,9 +411,10 @@ details.manage-section[open] summary {
     width: 76px;
   }
 
+  /* ここも16px維持 */
   input, select, button {
     min-height: 36px;
-    font-size: 13px;
+    font-size: 16px;
     padding: 6px 4px;
   }
 
@@ -451,7 +452,7 @@ details.manage-section[open] summary {
       <div class="formula-grid">
         <div class="box-wide">
           <div class="label">種類</div>
-          <select id="hingeSelect" class="hinge main-select"></select>
+          <select id="hingeSelect" class="hinge main-select" autocomplete="off"></select>
         </div>
       </div>
     </div>
@@ -462,19 +463,19 @@ details.manage-section[open] summary {
       <div class="formula-grid">
         <div class="box">
           <div class="label">見付け</div>
-          <input id="topMituke" class="frame" value="25" inputmode="decimal">
+          <input id="topMituke" class="frame" value="25" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box">
           <div class="label">隙間</div>
-          <input id="topGap" class="gap" inputmode="decimal">
+          <input id="topGap" class="gap" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box">
           <div class="label">基準</div>
-          <input id="topBase" class="door" inputmode="decimal">
+          <input id="topBase" class="door" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
@@ -497,25 +498,25 @@ details.manage-section[open] summary {
       <div class="formula-grid-6">
         <div class="box">
           <div class="label">沓摺①</div>
-          <input id="bottomSill1" class="frame" inputmode="decimal">
+          <input id="bottomSill1" class="frame" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box">
           <div class="label">沓摺②</div>
-          <input id="bottomSill2" class="frame" inputmode="decimal">
+          <input id="bottomSill2" class="frame" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box">
           <div class="label">隙間</div>
-          <input id="bottomGap" class="gap" inputmode="decimal">
+          <input id="bottomGap" class="gap" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box">
           <div class="label">基準</div>
-          <input id="bottomBase" class="door" inputmode="decimal">
+          <input id="bottomBase" class="door" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">－</div></div>
 
@@ -538,7 +539,7 @@ details.manage-section[open] summary {
       <div class="formula-grid-4">
         <div class="box-wide">
           <div class="label">DH</div>
-          <input id="dh" class="door" inputmode="decimal">
+          <input id="dh" class="door" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box-wide">
           <div class="label">枠全長</div>
@@ -546,7 +547,7 @@ details.manage-section[open] summary {
         </div>
         <div class="box-wide">
           <div class="label">丁番枚数</div>
-          <input id="hingeCount" class="door" inputmode="numeric" pattern="[0-9]*">
+          <input id="hingeCount" class="door" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
       </div>
     </div>
@@ -556,11 +557,11 @@ details.manage-section[open] summary {
       <div class="formula-grid-4">
         <div class="box-wide">
           <div class="label">名前</div>
-          <input id="newHingeName">
+          <input id="newHingeName" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box">
           <div class="label">値</div>
-          <input id="newHingeValue" class="hinge" inputmode="decimal">
+          <input id="newHingeValue" class="hinge" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box-wide">
           <div class="label">追加</div>
@@ -577,7 +578,7 @@ details.manage-section[open] summary {
       <div class="formula-grid">
         <div class="box-wide">
           <div class="label">種類</div>
-          <select id="strikeSelect" class="strike main-select"></select>
+          <select id="strikeSelect" class="strike main-select" autocomplete="off"></select>
         </div>
       </div>
     </div>
@@ -588,19 +589,19 @@ details.manage-section[open] summary {
       <div class="formula-grid-6">
         <div class="box strike-long">
           <div class="label">枠下端～H①</div>
-          <input id="strikeFromBottom1" class="frame" inputmode="decimal">
+          <input id="strikeFromBottom1" class="frame" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box strike-long">
           <div class="label">枠下端～H②</div>
-          <input id="strikeFromBottom2" class="frame" inputmode="decimal">
+          <input id="strikeFromBottom2" class="frame" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box">
           <div class="label">基準値</div>
-          <input id="strikeBase" class="door" inputmode="decimal">
+          <input id="strikeBase" class="door" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">－</div></div>
 
@@ -643,7 +644,7 @@ details.manage-section[open] summary {
 
         <div class="box">
           <div class="label">枠板厚</div>
-          <input id="frameThickness" class="frame" inputmode="decimal">
+          <input id="frameThickness" class="frame" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＝</div></div>
 
@@ -659,19 +660,19 @@ details.manage-section[open] summary {
       <div class="formula-grid-4">
         <div class="box-wide">
           <div class="label">名前</div>
-          <input id="newStrikeName">
+          <input id="newStrikeName" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box">
           <div class="label">下端</div>
-          <input id="newStrikeOffset" class="strike" inputmode="decimal">
+          <input id="newStrikeOffset" class="strike" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box">
           <div class="label">高さ</div>
-          <input id="newStrikeHeight" class="strike" inputmode="decimal">
+          <input id="newStrikeHeight" class="strike" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box">
           <div class="label">厚み</div>
-          <input id="newStrikeThickness" class="strike" inputmode="decimal">
+          <input id="newStrikeThickness" class="strike" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box-wide">
           <div class="label">追加</div>
@@ -688,7 +689,7 @@ details.manage-section[open] summary {
       <div class="formula-grid">
         <div class="box-wide">
           <div class="label">種類</div>
-          <select id="flushSelect" class="flush main-select"></select>
+          <select id="flushSelect" class="flush main-select" autocomplete="off"></select>
         </div>
       </div>
     </div>
@@ -699,13 +700,13 @@ details.manage-section[open] summary {
       <div class="formula-grid">
         <div class="box">
           <div class="label">親W</div>
-          <input id="parentW" class="door" inputmode="decimal">
+          <input id="parentW" class="door" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">＋</div></div>
 
         <div class="box">
           <div class="label">召合わせ</div>
-          <input id="meetingInput" class="frame" inputmode="decimal">
+          <input id="meetingInput" class="frame" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="op-box"><div class="op-mark">→</div></div>
 
@@ -733,11 +734,11 @@ details.manage-section[open] summary {
       <div class="formula-grid-4">
         <div class="box-wide">
           <div class="label">名前</div>
-          <input id="newFlushName">
+          <input id="newFlushName" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box">
           <div class="label">値</div>
-          <input id="newFlushValue" class="flush" inputmode="decimal">
+          <input id="newFlushValue" class="flush" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box-wide">
           <div class="label">追加</div>
@@ -783,7 +784,7 @@ details.manage-section[open] summary {
       <div class="formula-grid-4">
         <div class="box-wide">
           <div class="label">種類</div>
-          <select id="manageType">
+          <select id="manageType" autocomplete="off">
             <option value="hinge">丁番</option>
             <option value="strike">ストライク</option>
             <option value="flush">フランス落とし</option>
@@ -791,15 +792,15 @@ details.manage-section[open] summary {
         </div>
         <div class="box-wide">
           <div class="label">名前</div>
-          <input id="manageName">
+          <input id="manageName" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box">
           <div class="label">値1</div>
-          <input id="manageValue1" inputmode="decimal">
+          <input id="manageValue1" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
         <div class="box">
           <div class="label">値2</div>
-          <input id="manageValue2" inputmode="decimal">
+          <input id="manageValue2" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         </div>
       </div>
 
@@ -824,7 +825,8 @@ details.manage-section[open] summary {
   <div class="footer-note">
     ※ ボックスを小さめにして横並び化済み<br>
     ※ 記号（＋・－・＝）を追加済み<br>
-    ※ 召合わせは自動で半分計算されます
+    ※ 召合わせは自動で半分計算されます<br>
+    ※ iPhoneのズーム防止・自動入力抑制対応済み
   </div>
 
 </div>
